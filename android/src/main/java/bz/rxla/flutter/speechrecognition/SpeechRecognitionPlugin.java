@@ -14,14 +14,28 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
-/**
- * SpeechRecognitionPlugin
- */
 public class SpeechRecognitionPlugin implements MethodCallHandler, RecognitionListener {
 
     private static final String LOG_TAG = "SpeechRecognitionPlugin";
+    private static final int UNKNOWN_ERROR_CODE = 9999;
+    private static final Map<Integer, String> ERRORS = new HashMap<>();
+
+    static {
+        ERRORS.put(SpeechRecognizer.ERROR_AUDIO, "ERROR_AUDIO");
+        ERRORS.put(SpeechRecognizer.ERROR_CLIENT, "ERROR_CLIENT");
+        ERRORS.put(SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS, "ERROR_INSUFFICIENT_PERMISSIONS");
+        ERRORS.put(SpeechRecognizer.ERROR_NETWORK, "ERROR_NETWORK");
+        ERRORS.put(SpeechRecognizer.ERROR_NETWORK_TIMEOUT, "ERROR_NETWORK_TIMEOUT");
+        ERRORS.put(SpeechRecognizer.ERROR_NO_MATCH, "ERROR_NO_MATCH");
+        ERRORS.put(SpeechRecognizer.ERROR_RECOGNIZER_BUSY, "ERROR_RECOGNIZER_BUSY");
+        ERRORS.put(SpeechRecognizer.ERROR_SERVER, "ERROR_SERVER");
+        ERRORS.put(SpeechRecognizer.ERROR_SPEECH_TIMEOUT, "ERROR_SPEECH_TIMEOUT");
+        ERRORS.put(UNKNOWN_ERROR_CODE, "UNKNOWN_ERROR");
+    }
 
     private SpeechRecognizer speech;
     private MethodChannel speechChannel;
@@ -123,9 +137,11 @@ public class SpeechRecognitionPlugin implements MethodCallHandler, RecognitionLi
 
     @Override
     public void onError(int error) {
-        Log.d(LOG_TAG, "onError : " + error);
+        String e = ERRORS.get(error);
+        e = e == null ? ERRORS.get(UNKNOWN_ERROR_CODE) : e;
+        Log.d(LOG_TAG, "onError : " + e);
         speechChannel.invokeMethod("speech.onSpeechAvailability", false);
-        speechChannel.invokeMethod("speech.onError", error);
+        speechChannel.invokeMethod("speech.onError", e);
     }
 
     @Override
@@ -141,7 +157,7 @@ public class SpeechRecognitionPlugin implements MethodCallHandler, RecognitionLi
 
     @Override
     public void onEvent(int eventType, Bundle params) {
-        Log.d(LOG_TAG, "onEvent : " + eventType);
+        // Do nothing
     }
 
     @Override

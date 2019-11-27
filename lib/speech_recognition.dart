@@ -20,15 +20,11 @@ class SpeechRecognition {
   }
 
   AvailabilityHandler availabilityHandler;
-
   StringResultHandler currentLocaleHandler;
   StringResultHandler recognitionResultHandler;
-
   VoidCallback recognitionStartedHandler;
-
   StringResultHandler recognitionCompleteHandler;
-  
-  VoidCallback errorHandler;
+  StringResultHandler errorHandler;
 
   /// ask for speech  recognizer permission
   Future activate() => _channel.invokeMethod("speech.activate");
@@ -62,7 +58,7 @@ class SpeechRecognition {
         recognitionCompleteHandler(call.arguments);
         break;
       case "speech.onError":
-        errorHandler();
+        errorHandler(call.arguments);
         break;
       default:
         print('Unknowm method ${call.method} ');
@@ -88,5 +84,5 @@ class SpeechRecognition {
   void setCurrentLocaleHandler(StringResultHandler handler) =>
       currentLocaleHandler = handler;
   
-  void setErrorHandler(VoidCallback handler) => errorHandler = handler;
+  void setErrorHandler(StringResultHandler handler) => errorHandler = handler;
 }

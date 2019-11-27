@@ -30,7 +30,10 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "bz.rxla.flutter.speechrecognitionexample"
     }
-
+    /*dexOptions {
+        // release & debug is in project animators
+        matchingFallbacks = ['release', 'debug']
+    }*/
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

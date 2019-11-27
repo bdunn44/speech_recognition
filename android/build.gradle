@@ -4,20 +4,25 @@ version '1.0-SNAPSHOT'
 buildscript {
     repositories {
         jcenter()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:3.5.2'
     }
 }
 
 allprojects {
     repositories {
         jcenter()
+        flatDir {
+            dirs 'lib'
+        }
     }
 }
 
 apply plugin: 'com.android.library'
+
 
 android {
     compileSdkVersion 25
@@ -25,9 +30,9 @@ android {
 
     defaultConfig {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        minSdkVersion = 14
+        minSdkVersion 14
     }
-    lintOptions {
-        disable 'InvalidPackage'
+    dependencies {
+        implementation name: 'flutter'
     }
 }
